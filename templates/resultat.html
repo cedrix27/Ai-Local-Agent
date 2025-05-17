@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Résumé du CV</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>📄 Résumé du CV</h1>
+        <div class="resume-box">
+            {% for ligne in analyse.split('\n') %}
+                {% if ligne.strip() != '' %}
+                    <div class="resume-section">
+                        <p>{{ ligne }}</p>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        <a href="/" class="btn-retour">⬅ Retour</a>
+    </div>
+</body>
+</html>

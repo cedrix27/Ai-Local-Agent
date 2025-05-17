@@ -29,7 +29,17 @@ llm = Ollama(model="llama3:8b")
 
 # 🧠 Prompt d’analyse
 prompt_template = PromptTemplate.from_template("""
-Tu es un assistant RH intelligent. Résume ce CV, extrait les points clés du profil, compétences techniques, technologies utilisées, et expériences importantes. Ensuite, compare-le avec l'offre suivante, puis donne un pourcentage de correspondance (approximation) entre le profil et l’offre d’emploi. Explique les points forts et les points faibles du candidat. En francais
+Tu es un assistant RH intelligent. Résume ce CV de manière claire pour un recruteur, en extrayant :
+- Nom complet (si présent)
+- Poste recherché
+- Compétences techniques
+- Expériences principales
+- Diplômes obtenus
+- Langues maîtrisées
+- Outils ou technos connus
+Formate tout proprement. 
+                                               
+Ensuite, compare-le avec l'offre suivante, puis donne un pourcentage de correspondance (approximation) entre le profil et l’offre d’emploi. Explique les points forts et les points faibles du candidat. En francais
 
 CV :
 {cv}

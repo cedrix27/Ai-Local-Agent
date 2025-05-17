@@ -1,14 +1,11 @@
-from flask import Flask, request, render_template
+import streamlit as st
 from PyPDF2 import PdfReader
 from langchain_ollama import OllamaLLM
-
-# Initialisation Flask
-app = Flask(__name__, static_folder="static")
 
 # LLM via Langchain + Ollama
 llm = OllamaLLM(model="llama3:8b")
 
-# Offre d’emploi prédéfinie
+# Offre d'emploi par défaut
 offre_emploi_defaut = """
 Offre d'emploi : Développeur Fullstack React.js & Node.js
 - Développement frontend avec React.js
@@ -20,7 +17,7 @@ Offre d'emploi : Développeur Fullstack React.js & Node.js
 - Environnement Agile / Scrum
 """
 
-# Extraction de texte depuis le PDF
+# Extraction du texte du CV
 def extraire_texte_cv(file):
     reader = PdfReader(file)
     texte = ""
@@ -28,7 +25,7 @@ def extraire_texte_cv(file):
         texte += page.extract_text() + "\n"
     return texte
 
-# Analyse via LLM
+# Analyse du CV
 def analyser_cv(cv_file, offre):
     texte_cv = extraire_texte_cv(cv_file)
     prompt = f"""
@@ -50,27 +47,27 @@ Résume ce CV de manière claire pour un recruteur, en extrayant :
 Formate tout proprement en français.
 Donne un pourcentage approximatif de correspondance avec l'offre :
 - Pourcentage de correspondance : ...%
-
-    """
+"""
     reponse = llm.invoke(prompt)
     return reponse
 
-# Interface HTML principale
-@app.route('/', methods=['GET'])
-def index():
-    return render_template('index.html')
+# -----------------------------
+# Application Streamlit
+# -----------------------------
 
-# Traitement formulaire
-@app.route('/resumer-cv', methods=['POST'])
-def resumer_cv():
-    if 'cv' not in request.files:
-        return "Aucun fichier CV envoyé", 400
+st.set_page_config(page_title="Résumé de CV & Matching", layout="centered")
+st.title("📄 Résumé de CV & Matching avec Offre d'Emploi")
 
-    cv_file = request.files['cv']
-    offre = request.form.get('offre') or offre_emploi_defaut
-    resultat = analyser_cv(cv_file, offre)
-    return render_template('resultat.html', analyse=resultat)
+uploaded_file = st.file_uploader("Upload ton CV en PDF", type=["pdf"])
+offre = st.text_area("Colle ici la description de l'offre d'emploi (ou laisse vide pour utiliser l'offre par défaut)", height=200)
 
-# Lancement serveur
-if __name__ == '__main__':
-    app.run(debug=True)
+if st.button("Analyser le CV"):
+    if uploaded_file is not None:
+        offre_utilisee = offre if offre.strip() != "" else offre_emploi_defaut
+        with st.spinner('Analyse en cours...'):
+            resultat = analyser_cv(uploaded_file, offre_utilisee)
+        
+        st.subheader("👍 Résultat de l'analyse :")
+        st.write(resultat)
+    else:
+        st.warning("Merci d'uploader un fichier CV en PDF.")

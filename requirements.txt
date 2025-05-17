@@ -2,3 +2,8 @@ langchain
 langchain-ollama
 langchain-chroma
 pandas
+
+numpy
+panda
+streamlit
+scikit-learn

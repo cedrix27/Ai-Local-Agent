@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>Analyse de CV - IA Locale</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f4f4f4;
+      padding: 2rem;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    form {
+      max-width: 600px;
+      margin: auto;
+      padding: 2rem;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 1rem;
+    }
+    input[type="file"],
+    textarea {
+      width: 100%;
+      margin-top: 0.5rem;
+      padding: 0.8rem;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      margin-top: 1.5rem;
+      padding: 0.8rem 1.5rem;
+      background-color: #007BFF;
+      border: none;
+      color: white;
+      font-weight: bold;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+  <h1>Analyse de CV par IA Locale</h1>
+  <form action="/resumer-cv" method="post" enctype="multipart/form-data">
+    <label for="cv">CV (PDF) :</label>
+    <input type="file" name="cv" accept=".pdf" required>
+
+    <label for="offre">Offre d'emploi :</label>
+    <textarea name="offre" rows="10" placeholder="Décrivez ici l'offre d'emploi..."></textarea>
+
+    <button type="submit">Analyser</button>
+  </form>
+</body>
+</html>
